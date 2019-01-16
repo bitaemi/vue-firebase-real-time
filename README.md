@@ -20,6 +20,40 @@
 - [16. Custom Events](#16-custom-events)
 - [17. Life-cycle Hooks](#17-life-cycle-hooks)
 - [18. Making Requests with Axious](#18-making-requests-with-axious)
+- [19. Filters](#19-filters)
+- [20. Computed Properties(custom search box)](#20-computed-propertiescustom-search-box)
+- [21. What is the Vue Router](#21-what-is-the-vue-router)
+- [22. Setting up Routes](#22-setting-up-routes)
+- [23. Router Links](#23-router-links)
+- [24. Route Parameters](#24-route-parameters)
+- [25. Watching the $route Object](#25-watching-the-route-object)
+- [26. More on Router Links](#26-more-on-router-links)
+- [27. Programmatically Redirecting Users](#27-programmatically-redirecting-users)
+- [28. Hash vs History Mode](#28-hash-vs-history-mode)
+- [29. Styling Active Links](#29-styling-active-links)
+- [30. Project Preview & Setup](#30-project-preview--setup)
+- [31. Project Structure](#31-project-structure)
+- [32. Material Design](#32-material-design)
+- [33. Navbar Component](#33-navbar-component)
+- [34. Index Component](#34-index-component)
+- [35. Deleting (local) Data](#35-deleting-local-data)
+- [36. Introduction to Firebase](#36-introduction-to-firebase)
+- [37. Setting up Firestore](#37-setting-up-firestore)
+- [38. Installing Firebase](#38-installing-firebase)
+- [39. Retrieving Firestore Data](#39-retrieving-firestore-data)
+- [40. Deleting Firestore Data](#40-deleting-firestore-data)
+- [41. Add Smoothie Component](#41-add-smoothie-component)
+- [42. Adding Ingredients](#42-adding-ingredients)
+- [43. Outputting Ingredients](#43-outputting-ingredients)
+- [45. Saving Records to Firestore](#45-saving-records-to-firestore)
+- [46. Deleting Ingredients](#46-deleting-ingredients)
+- [47. Edit Smoothie Route](#47-edit-smoothie-route)
+- [48. Firestore Queries](#48-firestore-queries)
+- [49. Edit Smoothie Form](#49-edit-smoothie-form)
+- [50. Updating Firestore Records](#50-updating-firestore-records)
+- [51. Deploying to Firebase](#51-deploying-to-firebase)
+- [52. Project Review](#52-project-review)
+- [53. Project Overview & Setup 00:03:15](#53-project-overview--setup-000315)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -225,24 +259,181 @@ where friends is data inside the main component.
 
 # 16. Custom Events
 
-Delete a friend from data:
+Delete a friend from data.
+
+We use the `$emit` method to emit custom events (here delete) from the child component to main component:
 
 ```JavaScript
     methods: {
         unfriend(friend) {
-            this.$emit('delete', { name });
+            this.$emit('delete', { name : friend });
         }
     }
 ```
-Listen at the emitted  event in the components call:
+Parent component listens at the emitted  event in the component's call:
 
+```<AllFriends :friends="friends" @delete="deleteFriend"/>``` (use `v-on:` or `@`)
 
+and has the deleteFriends method:
+
+```JavaScript
+  methods: {
+    deleteFriend(payload) {
+      this.friends = this.friends.filter(
+        friend =>  friend.name !== payload.name
+      )
+    }
+    // ..
+```
 
 # 17. Life-cycle Hooks
 
+
+- beforeCreate
+
+- created ( load any data here)
+
+- beforeMount (before compoment loads into the DOM)
+
+- mounted
+
+- beforeUpdated
+
+- updated
+
+- beforeDestroy
+
+- destroyed (here any required cleanup after the component has been destroyed)
+
 # 18. Making Requests with Axious
 
+`npm i axios`
 
+```JavaScript
+    console.log('created hook');
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+        .then(response => {
+        console.log(response);
+        this.posts = response.data;
+    })
+    .catch(error => console.log(error))
+```
+# 19. Filters
+
+Add the snippet filter in main.js
+
+```JavaScript
+Vue.filter('snippet', val => {
+  if(!val || typeof(val) != 'string') {
+    return ' ';
+  }
+  val = val.slice(0, 50);
+  return val + '...';
+});
+```
+apply the filter(pipe from Angular) using the pipe:
+
+```HTML
+    <p>{{ post.body | snippet }}</p>
+```
+# 20. Computed Properties(custom search box)
+
+Add the `computed` property in component's export:
+
+```JavaScript
+export default {
+    name: 'Blogs',
+    data() {
+        return {
+            // ..
+            posts: [],
+            searchTerm: '',
+            // ..
+        }
+    },
+    computed: {
+        filterPosts() {
+            return this.posts.filter(
+                posts => posts.title.match(this.searchTerm)
+            );
+        }
+    },
+    // ..
+```
+Iterate through the return of computed object (filterPosts() object), instead of all posts:
+
+```HTML
+    <div v-for="post in filterPosts" :key="post.id">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.body | snippet }}</p>
+    </div>
+```
+# 21. What is the Vue Router
+
+`vue init webpack routing`
+
+
+# 22. Setting up Routes
+
+# 23. Router Links
+
+# 24. Route Parameters
+
+# 25. Watching the $route Object
+
+# 26. More on Router Links
+
+# 27. Programmatically Redirecting Users
+
+# 28. Hash vs History Mode
+
+# 29. Styling Active Links
+
+# 30. Project Preview & Setup
+
+# 31. Project Structure
+
+# 32. Material Design
+
+# 33. Navbar Component
+
+# 34. Index Component
+
+# 35. Deleting (local) Data
+
+# 36. Introduction to Firebase
+
+# 37. Setting up Firestore
+
+# 38. Installing Firebase
+
+# 39. Retrieving Firestore Data
+
+# 40. Deleting Firestore Data
+
+# 41. Add Smoothie Component
+
+# 42. Adding Ingredients
+
+# 43. Outputting Ingredients
+
+# 45. Saving Records to Firestore
+
+# 46. Deleting Ingredients
+
+# 47. Edit Smoothie Route
+
+# 48. Firestore Queries
+
+# 49. Edit Smoothie Form
+
+# 50. Updating Firestore Records
+
+# 51. Deploying to Firebase
+
+# 52. Project Review
+
+# 53. Project Overview & Setup 00:03:15
 
 
 

@@ -4,6 +4,7 @@
     <Navbar />
     <AllFriends :friends="friends" @delete="deleteFriend"/>
     <OnlineFriends :friends="friends"/>
+    <Blogs />
   </div>
 </template>
 
@@ -11,13 +12,15 @@
 import Navbar from './Navbar';
 import AllFriends from './AllFriends';
 import OnlineFriends from './OnlineFriends';
+import Blogs from './Blogs';
 
 export default {
   name: 'app',
   components: {
     Navbar,
     AllFriends,
-    OnlineFriends
+    OnlineFriends,
+    Blogs
   },
   data () {
     return {
@@ -28,6 +31,13 @@ export default {
                 { name: 'Ana', online: true },
                 { name: 'Dan', online: true },
             ]
+    }
+  },
+  methods: {
+    deleteFriend(payload) {
+      this.friends = this.friends.filter(
+        friend =>  friend.name !== payload.name
+      )
     }
   }
 }

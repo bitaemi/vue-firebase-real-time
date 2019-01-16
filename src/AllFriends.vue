@@ -5,7 +5,7 @@
             <span>
             {{ friend.name }}
             </span>
-            <span click='unfriend(friend.name)'>Unfriend</span>
+            <span @click='unfriend(friend.name)'>Unfriend</span>
         </div>
         </div>
 </template>
@@ -20,7 +20,7 @@ export default {
         }
     },
     methods: {
-        unfriend(friend) {
+        unfriend(name) {
             this.$emit('delete', { name });
         }
     }
