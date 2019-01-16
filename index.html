@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+    .one {
+        color: green;
+    }
+    .two {
+        text-decoration: line-through;
+    }
+    .canvas {
+        width: 300px;
+        height: 300px;
+        margin-top:20px;
+        background:  #ddd;
+    }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Vue Basics</title>
+</head>
+<body>
+<h1>Vue Basics</h1>
+<div id="app">
+    <h2>{{ title }}</h2>
+    <p>{{ greet('moorning') }}</p>
+    <a v-bind:href="url">Youtube</a>
+    <div v-bind:class="classes">Classes from instances</div>
+<input type="text" v-bind:value="name">
+<p>I earn {{ wage }} pounds per hour</p>
+<button v-on:click="wage++">Increase wage by 1$</button>
+<button v-on:dblclick="changeWage(-4)">Dblclick to decrease wage by 4$</button>
+<button v-on:click="changeWage(-1)">Decrease wage by 1$</button>
+<button @click="logEvent">Log Event info</button>
+<div class="canvas" @mouseMove="logCoords">{{ coords.x }},{{ coords.y }}</div>
+<p>My name is {{ name }}</p>
+<input type="text" @keyup="updateName">
+<p>Two way data-binding for title {{ title }}:</p>
+<input type="text" v-model="title">
+<button @click.alt="eventModifiers">Test alt-click event key modifier</button>
+<button @click.alt="eventModifiers">Test shift-click event key modifier</button>
+<a href="google.com" @click.prevent="eventModifiers">Google</a>
+<p v-if="!loggedIn"> v-if show 'Login' for logged in {{ showName }}:
+    <button @click="login">Login</button>
+</p>
+<p v-else-if="showName"> v-else-if show 'Hi, {{ name }}' for knowned loggedin user: {{ showName }}
+    <button @click="logout">Logout </button>
+</p>
+<p>
+    <ul>
+        <li v-for="item in items">
+            {{ item }}
+        </li>
+    </ul>
+</p>
+<div v-for="(ninja, index) in ninjas">
+    <p>
+        {{ index }}.{{ ninja.name }} is {{ ninja.age }} years old and has a {{ ninja.belt }}
+    </p>
+</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
