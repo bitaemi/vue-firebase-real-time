@@ -480,7 +480,7 @@ when we have the watch property, the updateId will run and update data with the 
 
 # 28. Hash vs History Mode
 
-The `#` symbol in links is required to be there to prevent a new call to the server,when accessing a new page.
+The `#` symbol in links is required to be there to prevent a new call to the server, when accessing a new page.
 
 **On local server**, to hide the hash, we set the `mode` property of the browser to 'history':
 
