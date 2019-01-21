@@ -566,21 +566,128 @@ Use Firestore :
 
 # 37. Setting up Firestore
 
+Google Firebase -> Go to Dashboard
 
 
 # 38. Installing Firebase
 
+``npm i firebase``
+
+Project Overview and click on: </> to copy the config object
+
 # 39. Retrieving Firestore Data
+
+```JavaScript
+import firebase from 'firebase';
+
+//initialize Firebase
+var config = {
+    apiKey: "AIzaSyCOUsS6YQrqcFLNWzSV-vzq-fNTVjmir5I",
+    authDomain: "ninja-smooties-97572.firebaseapp.com",
+    databaseURL: "https://ninja-smooties-97572.firebaseio.com",
+    projectId: "ninja-smooties-97572",
+    storageBucket: "ninja-smooties-97572.appspot.com",
+    messagingSenderId: "291122468448"
+  };
+
+const firebaseApp = firebase.initializeApp(config);
+
+// firebaseApp.firestore().settings({timestampsInSnapshot: true});
+
+export default firebaseApp.firestore();
+```
+ and in the created life cicle hook:
+
+ ```TypeScript
+   created() {
+      db.collection('sooties').get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          // console.log(doc.data(), doc.id);
+          let smootie = doc.data()
+          smootie.id = doc.id
+          this.sooties.push(smootie)
+        })
+      }).catch(err => console.log(err))
+
+  },
+```
 
 # 40. Deleting Firestore Data
 
+```TypeScript
+    deleteItem(id) {
+
+    db.collection('sooties').doc(id).delete()
+        .then(() => {
+        this.sooties = this.sooties.filter(
+            smootie => smootie.id !== id
+        )
+        })
+    }
+```        
+
 # 41. Add Smoothie Component
+
+Prevent the defalt behaviour of the submit event(refresh page), using the prevent modifier:
+
+```HTML
+<form @submit.prevent="AddSmootie">
+```
+
+``<input type="text" for="title" name="title" v-model="title" >``
 
 # 42. Adding Ingredients
 
+After entering an ingredient, and pressing tab the defalt event of passing to the following field is prevented
+
+and addIng method is executed:
+
+```HTML
+    <div class="field add-ingredient">
+        <label for="text" name="add-ingredient">
+            Add an ingredient:
+        </label>
+        <input type="text" for="add-ingredient" @keydown.tab.prevent="addIng" v-model="another">
+    </div>
+```
 # 43. Outputting Ingredients
 
+```HTML
+    <div v-for="(ing, index) in ingredients" :key="index">
+            <label for="ingredient">
+            Ingredient
+            </label> 
+            <input type="text" v-model="ingredients[index]" />
+    </div>
+```            
+
 # 45. Saving Records to Firestore
+
+`npm i slugify --save` to import a llibrary to generate slugs
+
+```JavaScript
+    AddSmootie() {
+        if (this.title) {
+            this.feedback = null
+            this.slug = slugify(this.title, {
+                replacement: '-',
+                remove: /[$*_+¬.()'"!\-:@]/g,
+                lower:true
+            })
+            db.collection('sooties').add({
+                title: this.title,
+                slug: this.slug,
+                ingredients: this.ingredients
+            }).then(
+                () => this.$router.push({ name: 'Index' })
+            ).catch( err => console.log(err))
+        } else {
+            feedback = ' You must enter a new title'
+        }
+
+    },
+```
 
 # 46. Deleting Ingredients
 

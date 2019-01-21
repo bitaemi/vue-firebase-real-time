@@ -1,6 +1,6 @@
 <template>
   <div class="index container">
-    <div class="card" v-for="smootie in smooties" :key="smootie.id">
+    <div class="card" v-for="smootie in sooties" :key="smootie.id">
       <div class="card-content">
         <h2 class="indigo-text"> {{ smootie.title }}</h2>
         <ul class="ingredients">
@@ -16,24 +16,37 @@
   </div>
 </template>
 
-<script>
+<script>;
+import db from '@/firebase/init';
 export default {
   name: 'HelloWorld',
   data () {
     return {
-      smooties: [
-        { title: 'Vanilla Smooties', slug: 'ninja-brew', ingredients: ['bananas', 'vanilla', 'milk'], id: '1'},
-        { title: 'Moorning Mood', slug: 'moorning-mood', ingredients: ['cofee', 'milk', 'chocholate'], id: '2'},
-      ]
+      sooties: []
     }
+  },
+  created() {
+      db.collection('sooties').get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          // console.log(doc.data(), doc.id);
+          let smootie = doc.data()
+          smootie.id = doc.id
+          this.sooties.push(smootie)
+        })
+      }).catch(err => console.log(err))
+
   },
   methods: {
       deleteItem(id) {
-      this.smooties = this.smooties.filter(
-        smootie => smootie.id !== id
-      )
 
-    }
+        db.collection('sooties').doc(id).delete()
+            .then(() => {
+            this.sooties = this.sooties.filter(
+                smootie => smootie.id !== id
+            )
+            })
+        }
   }
 }
 </script>
