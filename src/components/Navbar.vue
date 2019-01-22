@@ -6,7 +6,7 @@
                     <span class="nav-title">Ninja Smooties</span>
                 </router-link>
                 <a href="" class="btn-floating btn-small halfway-fab pink">
-                    <router-link :to="{ name: 'AddSmootie'}"><i class="material-icons">add</i></router-link>
+                    <router-link :to="{ name: 'AddSmootie' }"><i class="material-icons">add</i></router-link>
                 </a>
             </div>
         </nav>

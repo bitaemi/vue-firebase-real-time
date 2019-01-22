@@ -1,6 +1,6 @@
 <template>
   <div class="index container">
-    <div class="card" v-for="smootie in sooties" :key="smootie.id">
+    <div class="card" v-for="smootie in smooties" :key="smootie.id">
       <div class="card-content">
         <h2 class="indigo-text"> {{ smootie.title }}</h2>
         <ul class="ingredients">
@@ -11,6 +11,11 @@
           </li>
         </ul>
         <i class="material-icons delete" @click="deleteItem(smootie.id)">delete</i>
+      <span class="btn-floating btn-small halfway-fab pink">
+        <router-link :to="{ name: 'EditSmootie', params: { slug: smootie.slug } }">
+          <i class="material-icons edit">edit</i>
+        </router-link> 
+      </span>
       </div>
     </div>
   </div>
@@ -19,10 +24,10 @@
 <script>;
 import db from '@/firebase/init';
 export default {
-  name: 'HelloWorld',
+  name: 'Index',
   data () {
     return {
-      sooties: []
+      smooties: []
     }
   },
   created() {
@@ -32,7 +37,7 @@ export default {
           // console.log(doc.data(), doc.id);
           let smootie = doc.data()
           smootie.id = doc.id
-          this.sooties.push(smootie)
+          this.smooties.push(smootie)
         })
       }).catch(err => console.log(err))
 
@@ -42,7 +47,7 @@ export default {
 
         db.collection('sooties').doc(id).delete()
             .then(() => {
-            this.sooties = this.sooties.filter(
+            this.smooties = this.smooties.filter(
                 smootie => smootie.id !== id
             )
             })
@@ -70,11 +75,17 @@ export default {
 .index .ingredients li{
   display: inline-block;
 }
-.index .delete {
+.index .delete, .index .edit {
   position:absolute;
-  top: 4px;
   right: 4px;
   cursor: pointer;
   color: #ddd;
+}
+.index .delete {
+top: 4px;
+}
+
+.index .edit {
+bottom: 6px;
 }
 </style>

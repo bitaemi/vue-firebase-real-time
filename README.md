@@ -52,8 +52,7 @@
 - [49. Edit Smoothie Form](#49-edit-smoothie-form)
 - [50. Updating Firestore Records](#50-updating-firestore-records)
 - [51. Deploying to Firebase](#51-deploying-to-firebase)
-- [52. Project Review](#52-project-review)
-- [53. Project Overview & Setup 00:03:15](#53-project-overview--setup-000315)
+- [52. Chat Project Overview & Setup](#52-chat-project-overview--setup)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -77,10 +76,10 @@ Vue:
 
 An event object is created;
 
-```JavaScript
+```HTML
 <p>I earn {{ wage }} pounds per hour</p>
-<button v-on:click="wage++">Increase wage by 1$</button>
-<button v-on:click="changeWage(-1)">Decrease wage by 1$</button>
+<button v-on:click="wage++">Increase wage by 1$ </button>
+<button v-on:click="changeWage(-1)">Decrease wage by 1$ </button>
 ```
 # 3. React to double click events with v-on directive
 
@@ -423,6 +422,7 @@ read the param from route:
       return {
           userId: this.$route.params.user_id
       }
+      // ..
 ```
 
 # 25. Watching the $route Object
@@ -656,7 +656,7 @@ and addIng method is executed:
 ```HTML
     <div v-for="(ing, index) in ingredients" :key="index">
             <label for="ingredient">
-            Ingredient
+            Ingredient:
             </label> 
             <input type="text" v-model="ingredients[index]" />
     </div>
@@ -691,19 +691,114 @@ and addIng method is executed:
 
 # 46. Deleting Ingredients
 
+Delete an ingredient localy, before saving into database:
+
+```HTML
+    <div class="field" v-for="(ing, index) in ingredients" :key="index">
+        <label for="ingredient">
+        Ingredient
+        </label> 
+        <input type="text" v-model="ingredients[index]" />
+        <i class="material-icons delete" @click="deleteIng(ing)">delete</i>
+    </div>
+```
+
+```JavaScript
+    deleteIng(ing) {
+            this.ingredients = this.ingredients.filter( ingredient => ingredient !== ing)
+    }
+```        
 # 47. Edit Smoothie Route
+
+```JavaScript
+    {
+      path: '/edit-smootie/:slug',
+      name: 'EditSmootie',
+      component: EditSmootie
+    }
+```
 
 # 48. Firestore Queries
 
+collection is like a table in database, doc is like an entry in the table
+
+db.collection.doc.update // similar to update a row from tb
+
+db.collection.doc.add // add a row in table
+
+db.collection.where('row', 'comparison operator', 'value for the entry to be returned') // is a select whit where clause
+
+// ..
+
 # 49. Edit Smoothie Form
+
+is like the add form, but this time we specify input values using v-model directive with `smootie` object obtained in the `created()` 
+
+lifecycle hook.
+
 
 # 50. Updating Firestore Records
 
+Done like this, but is not correct to get the doc id from slug if slug is not unique.
+
+```JavaScript
+    created() {
+        let ref = db.collection('sooties').where('slug', '==', this.$route.params.slug);
+        ref.get().then(snapshot => {
+            return snapshot.forEach(doc => {
+                this.smootie = doc.data();
+                this.smootie.id = doc.id;
+            })
+        }).catch(err => console.log(err));
+```
+but rather use the id, or even don't make a new http requet to get data, use local data!:
+
+```JavaScript
+    let ref = db.collection('sooties').doc(this.id);
+    ref.get().then(doc => {
+            this.smootie = doc.data();
+            this.smootie.id = doc.data().id;
+            console.log(this.smootie);
+    }).catch(err => console.log(err));
+    console.log(ref);
+```
+
+```JavaScript
+db.collection('sooties').doc(this.smootie.id).update({
+    // ..
+```
 # 51. Deploying to Firebase
 
-# 52. Project Review
+access firebase  prj console: `https://console.firebase.google.com/project/myprojid/overview`
 
-# 53. Project Overview & Setup
+`npm i -g firebase-tools --save`
+
+`firebase login`
+
+`firebase init` and here:
+
+-  navigate with the arrow to hosting and select it by pressing space
+
+- press enter
+
+- select the defalt project ( jour prj name)
+
+- select as public folder the dist folder
+
+-select spa
+
+`npm run build` ?? have to build the project before deploy, otherwise  you'll have an empty index filed - deployed project:
+
+at https://myprojid.firebaseapp.com/
+
+`firebase deploy`
+
+
+# 52. Chat Project Overview & Setup
+
+Use REAL-TIME DATA update TECHIQUE
+
+
 
 
 
