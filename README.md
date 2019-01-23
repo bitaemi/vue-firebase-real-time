@@ -895,7 +895,9 @@ In chat's page we should see all the messages (messages = []) of the conversatio
 
 Listen for the messages when the component is created (created())
 
-Each entered message is added in firebase, so can use 
+Each entered message is added in firebase, so we can use  a snapshot of the messages collection,
+
+and get only those added using the docChanges method:
 
 ```JavaScript
     created() {
@@ -921,3 +923,36 @@ Each entered message is added in firebase, so can use
  # Formating time with Moment.js
 
 `npm i moment --save`
+
+```JavaScript
+ timestamp: moment(doc.data().timestamp).format('lll'),
+```
+
+# Auto scrolling for a Real Time Updating Page
+
+`npm i vue-chat-scroll`
+
+```CSS
+
+.messages {
+    text-align: left;
+    max-height:  300px;
+    overflow: auto;
+}
+.messages::-webkit-scrollbar {
+    width: 3px;
+}
+.messages::-webkit-scrollbar-track{
+    width: #ddd;
+}
+.messages::-webkit-scrollbar-thumb {
+    width: #aaa;
+}
+```
+
+In main.js import the VueChatScroll class from the `vue-chat-scroll` library
+
+and plugin this class(plugin) like this:
+
+`Vue.use(VueChatScroll)`
+

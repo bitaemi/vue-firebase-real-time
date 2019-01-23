@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueChatScroll from 'vue-chat-scroll'
 
 Vue.config.productionTip = false
+Vue.use(VueChatScroll)
 
 /* eslint-disable no-new */
 new Vue({

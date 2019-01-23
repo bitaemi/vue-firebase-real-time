@@ -3,7 +3,7 @@
         <h2 class="teal-text center">Vue Chat</h2>
         <div class="card">
             <div class="card-content">
-                <ul class="messages">
+                <ul class="messages" v-chat-scroll>
                     <li v-for="(message, index) in messages" :key="index">
                         <span class="teal-text">{{ message.name }}: </span>
                         <span class="grey-text text-darken-3">{{ message.content }}</span>
@@ -69,5 +69,16 @@ export default {
 }
 .messages {
     text-align: left;
+    max-height:  300px;
+    overflow: auto;
+}
+.messages::-webkit-scrollbar {
+    width: 3px;
+}
+.messages::-webkit-scrollbar-track{
+    width: #ddd;
+}
+.messages::-webkit-scrollbar-thumb {
+    width: #aaa;
 }
 </style>

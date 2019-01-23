@@ -13,6 +13,7 @@
     "firebase": "^5.8.0",
     "moment": "^2.24.0",
     "vue": "^2.5.2",
+    "vue-chat-scroll": "^1.3.5",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
