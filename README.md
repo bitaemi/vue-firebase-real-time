@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0. Visual Studio Code Installed extensions](#0-visual-studio-code-installed-extensions)
 - [1. Dinamically bind data using `v-bind` directive](#1-dinamically-bind-data-using-v-bind-directive)
 - [2. React to events with v-on directive](#2-react-to-events-with-v-on-directive)
 - [3. React to double click events with v-on directive](#3-react-to-double-click-events-with-v-on-directive)
@@ -53,16 +54,37 @@
 - [50. Updating Firestore Records](#50-updating-firestore-records)
 - [51. Deploying to Firebase](#51-deploying-to-firebase)
 - [52. Chat Project Overview & Setup](#52-chat-project-overview--setup)
+- [Passing `props` via Routes](#passing-props-via-routes)
+- [Route Guard](#route-guard)
+- [Add Firestore Docs in non-existent Collection](#add-firestore-docs-in-non-existent-collection)
+- [Real time Events (Event Listeners)](#real-time-events-event-listeners)
+- [Formating time with Moment.js](#formating-time-with-momentjs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-VSC pugins: Live Server, Monokai++, Vetur
 
 Vue:
 
  - front-end JS framework  used for web SPAs or widgets
 
  - very small compared to Angular or React
+
+# 0. Visual Studio Code Installed extensions
+
+  VS Live Share
+
+  npm Intellisense
+
+  Debugger For Chrome
+
+  TS Lint
+
+  Auto Import
+
+  Sass
+
+  Npm
+
+ Live Server, Monokai++, Vetur
 
 # 1. Dinamically bind data using `v-bind` directive
 
@@ -507,7 +529,7 @@ Use Firestore = a real time noSQL database provided by Firebase.
 
 # 32. Material Design
 
-use Material CSS library
+use Material CSS library: (https://materializecss.com/getting-started.html)[https://materializecss.com/getting-started.html]
 
 # 33. Navbar Component
 
@@ -726,7 +748,12 @@ db.collection.doc.update // similar to update a row from tb
 
 db.collection.doc.add // add a row in table
 
+db.collection.doc.push // add a row in table
+
 db.collection.where('row', 'comparison operator', 'value for the entry to be returned') // is a select whit where clause
+
+db.collection.orderBy //select with order clause
+
 
 // ..
 
@@ -798,7 +825,99 @@ at https://myprojid.firebaseapp.com/
 
 Use REAL-TIME DATA update TECHIQUE
 
-
 `vue init webpack vue-chat`
 
+`npm start`
 
+# Passing `props` via Routes
+
+```JavaScript
+
+    // in the redirecting component:
+    
+    this.$router.push({ name: 'Chat', params: { name: this.name }});
+
+    // ... and in the Chat component:
+
+    export default {
+    name: 'Chat',
+    props: ['name'],
+     // ...
+
+     // and  in router:
+    {
+      path: '/chat',
+      name: 'Chat',
+      component: Chat,
+      props: true
+    },
+    // ...
+```
+
+# Route Guard
+
+Handle the case where the route does not exist - add a beforeEnter function value:
+
+```JavaScript
+    {
+      path: '/chat',
+      name: 'Chat',
+      component: Chat,
+      props: true,
+      beforeEnter: (to, from, next) => {
+        if (to.params.name) {
+          next()
+        }
+        else {
+          next({name: 'Welcome'})
+        }
+      }
+    }
+```    
+
+# Add Firestore Docs in non-existent Collection
+
+if the collection doesn't exist will automatically create it:
+
+```JavaScript
+
+    db.collection('message').add({
+        content: this.newMessage,
+        name: this.name,
+        timestamp: Date.now()
+    }).catch(
+        err => console.log(err)
+    )
+```
+# Real time Events (Event Listeners)
+
+In chat's page we should see all the messages (messages = []) of the conversation
+
+Listen for the messages when the component is created (created())
+
+Each entered message is added in firebase, so can use 
+
+```JavaScript
+    created() {
+        let ref = db.collection('messages').orderBy('timestamp')
+        ref.onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type == 'added') {
+                    let doc = change.doc
+                    this.messages.push({
+                        id: doc.id,
+                        name: doc.data().name,
+                        content: doc.data().content,
+                        timestamp: doc.data().timestamp,
+
+                    })
+                }
+                
+            });
+        }
+        )
+    },
+```
+ # Formating time with Moment.js
+
+`npm i moment --save`
