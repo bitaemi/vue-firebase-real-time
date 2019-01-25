@@ -68,7 +68,7 @@ Vue:
 
  - very small compared to Angular or React
 
-# 0. Visual Studio Code Installed extensions
+# Visual Studio Code Installed extensions
 
   VS Live Share
 
@@ -804,7 +804,7 @@ access firebase  prj console: `https://console.firebase.google.com/project/mypro
 
 `firebase init` and here:
 
--  navigate with the arrow to hosting and select it by pressing space
+-  navigate with the arrow to firestore option and hosting option and select each by pressing space
 
 - press enter
 
@@ -933,7 +933,6 @@ and get only those added using the docChanges method:
 `npm i vue-chat-scroll`
 
 ```CSS
-
 .messages {
     text-align: left;
     max-height:  300px;
@@ -955,4 +954,23 @@ In main.js import the VueChatScroll class from the `vue-chat-scroll` library
 and plugin this class(plugin) like this:
 
 `Vue.use(VueChatScroll)`
+
+# Google Maps Api
+
+Head to : (https://console.developers.google.com/apis/dashboard?pli=1)[https://console.developers.google.com/apis/dashboard?pli=1] 
+
+to enable the Maps JavaScript Api for your project.
+
+Then: Credentials -> Credentials Manager -> Create Credentials -> and copy the API key for later usage.
+
+Go to: (https://cloud.google.com/maps-platform/)[https://cloud.google.com/maps-platform/]
+
+Copy the `<script>` tag from the buttom of the page:
+
+```JavaScript
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+    async defer></script>
+``` 
+
+and place it in the index.
 
