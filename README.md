@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [0. Visual Studio Code Installed extensions](#0-visual-studio-code-installed-extensions)
+- [Visual Studio Code Installed extensions](#visual-studio-code-installed-extensions)
 - [1. Dinamically bind data using `v-bind` directive](#1-dinamically-bind-data-using-v-bind-directive)
 - [2. React to events with v-on directive](#2-react-to-events-with-v-on-directive)
 - [3. React to double click events with v-on directive](#3-react-to-double-click-events-with-v-on-directive)
@@ -59,6 +59,12 @@
 - [Add Firestore Docs in non-existent Collection](#add-firestore-docs-in-non-existent-collection)
 - [Real time Events (Event Listeners)](#real-time-events-event-listeners)
 - [Formating time with Moment.js](#formating-time-with-momentjs)
+- [Auto scrolling for a Real Time Updating Page](#auto-scrolling-for-a-real-time-updating-page)
+- [Google Maps Api](#google-maps-api)
+- [Creating a new Map](#creating-a-new-map)
+- [Firebase Auth](#firebase-auth)
+- [Form Validations](#form-validations)
+- [Route Guarding (auth)](#route-guarding-auth)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -750,9 +756,9 @@ db.collection.doc.add // add a row in table
 
 db.collection.doc.push // add a row in table
 
-db.collection.where('row', 'comparison operator', 'value for the entry to be returned') // is a select whit where clause
+db.collection.where('row', 'comparison operator', 'value for the entry to be returned').get // is a select whit where clause
 
-db.collection.orderBy //select with order clause
+db.collection.orderBy.get //select with order clause
 
 
 // ..
@@ -766,7 +772,7 @@ lifecycle hook.
 
 # 50. Updating Firestore Records
 
-Done like this, but is not correct to get the doc id from slug if slug is not unique.
+Done like this, but is not correct to get the doc id from slug if slug is not unique:
 
 ```JavaScript
     created() {
@@ -778,7 +784,7 @@ Done like this, but is not correct to get the doc id from slug if slug is not un
             })
         }).catch(err => console.log(err));
 ```
-but rather use the id, or even don't make a new http requet to get data, use local data!:
+but rather use the id, or even don't make a new http request to get data, use local data!:
 
 ```JavaScript
     let ref = db.collection('sooties').doc(this.id);
@@ -796,7 +802,9 @@ db.collection('sooties').doc(this.smootie.id).update({
 ```
 # 51. Deploying to Firebase
 
-access firebase  prj console: `https://console.firebase.google.com/project/myprojid/overview`
+access firebase  prj console: [https://console.firebase.google.com/project/myprojid/overview]
+
+go to Hosting section
 
 `npm i -g firebase-tools --save`
 
@@ -973,4 +981,218 @@ Copy the `<script>` tag from the buttom of the page:
 ``` 
 
 and place it in the index.
+
+# Creating a new Map
+
+We need to insert the map into the DOM, so we cannot create it in the created() lifecle hook of the component, but rather in the mounted()
+
+hook, when the component has already mounted the DOM.
+
+# Firebase Auth
+
+ The Server( Firebase ) will interact with  the Vue App:
+
+  - Firebase Auth generates an id for each added user
+
+  - Firestore DB will have a geolocation entry for each user(identified by id)
+
+  - Google project console > Authentication > Get a sign-up method > email & pass method
+  
+   (for example)> Enable
+
+# Form Validations
+
+For the moment we will handle the validation on Vue App side, but is better to do it using 
+
+Firebase Cloud.
+ 
+ - create a reference to the document (entry in the users table=collection) of interest (in this case with the provided slug):
+
+```let usersRef = db.collection('users').doc(this.slug)```
+
+ - use Google's Firebase Auth for autenticating users (provides field validation also):
+
+ ```JavaScript
+    firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        .catch( err => {
+        this.feedback = err.message;
+    })
+```
+Calling ``createUserWithEmailAndPassword`` of Firebase Auth service will receive the credentials object (`cred`):
+
+```JavaScript
+firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+    .then(
+    cred => {
+        usersRef.set({
+            alias: this.alias,
+            geolocation: null,
+            id: cred.user.uid
+        })
+    })
+```
+
+Get CurrentUser info : ``firebase.auth().currentUser``
+
+Some rendering componets need firebase response and that's why we need to delay the rendering of the app until the firebase data loads:
+
+```JavaScript
+let app = null;
+
+//wait for firebase auth before creating the app:
+firebase.auth().onAuthStateChanged(() => {
+//init app if not already created:
+  if (!app) {
+    new Vue({
+      el: '#app',
+      router,
+      components: { App },
+      template: '<App/>'
+    })
+  }
+})
+```
+Logout the user using Firebase Auth method:
+
+```JavaScript
+    logout() {
+        firebase.auth().signOut().then(
+            () => {
+                this.$router.push({name: 'Login'})
+            }
+        )
+    }
+```
+Login the user :
+
+```firebase.auth().signInWithEmailAndPassword(this.email, this.password) ```
+
+Use browser's geolocation  info to render the map using coordinates provided by browser:
+
+```JavaScript
+    navigator.geolocation.getCurrentPosition(pos => {
+            this.lat = pos.coords.latitude
+            this.lng = pos.coords.longitude
+            this.renderMap()
+        },
+        (err) => {
+            console.log(err)
+            this.renderMap()
+        },
+        { maximumAge: 60000, timeout: 3000})
+```
+
+# Route Guarding (auth)
+
+Protect page from non-authenticated users, by adding to component's route:
+
+```JavaScript
+    meta: {
+        requiresAuth: true
+    }
+```
+
+Before each route coming ``from`` and going `to` a route with ``requiresAuth`` ``meta`` property, the ``next`` method is called in different ways, accordig to user's auth status:
+
+- with no params, will proceed to route
+
+- with redirecting component as parameter
+
+```JavaScript
+router.beforeEach((to, from, next) => {
+  //check to see if route requires auth
+
+  if (to.matched.some(rec => rec.meta.requiresAuth)) {
+    // check auth state of user
+    let user = firebase.auth().currentUser
+    if (user) {
+        // user signed in proceed to route
+        next()
+        } else {
+        // no  user signed in, redirect to home
+        next({name: 'Login'})
+        }
+   } else {
+       next()
+  }
+})
+```
+# Check auth status with onAuthStateChanged
+
+```JavaScript
+created() {
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            this.user = user
+        } else {
+            this.user = null
+        }
+
+    })
+},
+```
+
+# Google Map Marker
+
+Create a new google.maps.Marker object and use it to display user's current location:
+
+```JavaScript
+
+    db.collection('users').get().then(
+        users => {
+            users.docs.forEach(doc =>
+            {
+                let data = doc.data()
+                if (data.geolocation) {
+                    let marker = new google.maps.Marker({
+                        position: {
+                        lat: data.geolocation.lat,
+                        lng: data.geolocation.lng
+                    },
+                    map 
+                    })
+                    // add click event to marker:
+                    marker.addListener('click', () => {
+                        console.log(doc.id)
+                    })
+                }
+            })
+        }
+    )
+```
+
+# Real time comments update
+
+Use the onSnapshot and docChanges methods:
+
+```JavaScript
+    db.collection('comments').where('to', '==', this.$route.params.id)
+    .onSnapshot((snapshot) =>
+        {
+            snapshot.docChanges().forEach(
+                change => {
+                    if (change.type == 'added') {
+                        this.comments.unshift({
+                            from: change.doc.data().from,
+                            content: change.doc.data().content
+                        })
+                        console.log(this.comments);
+
+                    }
+                }
+            )
+        }
+    )
+```
+# Firebase Cloud Functions
+
+ - can be used to create configurations to take care of all the server management ( data processing functions that we use inse our app).
+
+``npm install firebase-functions@latest firebase-admin@latest --save``
+
+``npm install -g firebase-tools``
+
+``firebase login``
+
+`` firebase init functions``
 

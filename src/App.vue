@@ -8,7 +8,10 @@
 <script>
 import Navbar from '@/components/layouts/Navbar'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Navbar
+  }
 }
 </script>
 
@@ -20,5 +23,13 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+label {
+  float: left;
+  text-align: left;
+}
+body {
+  background-color: #ddd;
 }
 </style>

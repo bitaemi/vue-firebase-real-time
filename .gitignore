@@ -7,7 +7,7 @@ yarn-error.log*
 
 # you have initFake and indexFake replace  fake values with real credentials and keys, and rename the files:
 src/firebase/init.js
-index.html
+/index.html
 
 # Editor directories and files
 .idea
