@@ -65,6 +65,11 @@
 - [Firebase Auth](#firebase-auth)
 - [Form Validations](#form-validations)
 - [Route Guarding (auth)](#route-guarding-auth)
+- [Check auth status with onAuthStateChanged](#check-auth-status-with-onauthstatechanged)
+- [Google Map Marker](#google-map-marker)
+- [Real time comments update](#real-time-comments-update)
+- [Firebase Cloud Functions](#firebase-cloud-functions)
+- [Firebase Rules](#firebase-rules)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -73,6 +78,8 @@ Vue:
  - front-end JS framework  used for web SPAs or widgets
 
  - very small compared to Angular or React
+
+ - for this project you need to replace the indexFake and initFake with real configs
 
 # Visual Studio Code Installed extensions
 
@@ -198,11 +205,25 @@ prevents default behaviour.
 ```
  where ninjas is an array of objects.
 
-# 10. The Vue CLI
+# 10. The Vue CLI 3
+
+for the old CLI:
 
 `npm i -g vue-cli`
 `vue init webpack-simple vueproject`
 ...
+
+For the new CLI 3:
+
+`npm uninstall -g vue-cli`
+
+`npm i -g @vue/cli` install cli package from @vue scope
+
+`vue create vueproject`
+
+- allows change of project config using plugins;
+
+- graphical User Interface
 
 Build Setup
 
@@ -218,6 +239,14 @@ npm run build
 ```
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+# 10.1. VUE CLI Service, Plugins
+
+`vue-cli-service serve` or ``npm run serve`` to preview  the app
+
+``npm run lint`` to log the errors
+
+Add plugins running: `vue add vuetify` - this will add the plugin `cli-plugin-vuetify` into package.json, dependencies file.
 
 # 11. Components and Vue files
 
@@ -365,6 +394,8 @@ apply the filter(pipe from Angular) using the pipe:
 ```
 # 20. Computed Properties(custom search box)
 
+The `computed` prop looks at some data  and manipulates that data
+
 Add the `computed` property in component's export:
 
 ```JavaScript
@@ -397,7 +428,9 @@ Iterate through the return of computed object (filterPosts() object), instead of
 ```
 # 21. What is the Vue Router
 
-`vue init webpack vuerouting`
+`vue init webpack vuerouting` with the old CLI
+
+`vue create vuerouting`
 
 to generate a new project with router
 
@@ -758,6 +791,8 @@ db.collection.doc.push // add a row in table
 
 db.collection.where('row', 'comparison operator', 'value for the entry to be returned').get // is a select whit where clause
 
+db.collection.where('row', 'comparison operator', 'value for the entry to be returned').onSnapshot to use the returned snapsot with docChanges()
+
 db.collection.orderBy.get //select with order clause
 
 
@@ -959,7 +994,7 @@ and get only those added using the docChanges method:
 
 In main.js import the VueChatScroll class from the `vue-chat-scroll` library
 
-and plugin this class(plugin) like this:
+and plugin this class(plugin = package) like this:
 
 `Vue.use(VueChatScroll)`
 
@@ -1186,7 +1221,7 @@ Use the onSnapshot and docChanges methods:
 ```
 # Firebase Cloud Functions
 
- - can be used to create configurations to take care of all the server management ( data processing functions that we use inse our app).
+ - can be used to create configurations to take care of all the server management ( data processing functions that we use inside our app).
 
 ``npm install firebase-functions@latest firebase-admin@latest --save``
 
@@ -1196,3 +1231,64 @@ Use the onSnapshot and docChanges methods:
 
 `` firebase init functions``
 
+write the functions into functions/index.js
+
+``cd ./functions``
+
+`npm i googleapis`
+
+`firebase deploy --only functions` to deploy the functions to Firestore
+
+# Firebase Rules
+
+You can restrict database access, changing the `Rules` section or the firestore.rules file
+
+```
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read;
+      allow write: if requests.auth.uid !=null;
+    }
+  }
+}
+```
+deploy project to propagate rules changes to Firebase.
+
+# Deploy to Firebase
+
+Remember to use VUE CLI 3 and you will build the app simple:
+
+`nmp run build` ( this is not  executing the build.js file like in the old project created with the old VUE CLI)
+
+You can access your firebase app at https://yourprjname.firebaseapp.com after deploing:
+
+
+`firebase deploy --only hosting`
+
+# Instant Prototypeing
+
+`npm  i -g @vue/cli-service-global`
+
+this adds the serve vue cli and we can run:
+
+`vue serve online.vue` inside's online.vue component to instantly preview the component
+
+# Use VUE CLI 3 to build App, Libs or Web Components
+
+`npm  i -g @vue/cli-service-global`
+
+we build the web componet into a web component(online-status):
+
+`vue build online.vue --target wc --name online-status`
+
+# Use VUE CLI GUI
+
+`vue ui`
+
+and  in the opened [http://localhost:8000/project/select]:
+
+import your projects
+
+or create a new one with the default presets ...
+cd into prj folser and run npm serve
