@@ -9,6 +9,9 @@
                     <li v-if="user" ><a href=""  @click.prevent="logout">Logout</a></li>
                     <li v-if="user" >{{ user.email }}</li>
                     <li v-if="!user"><router-link :to="{name: 'Login'}">Login</router-link></li>
+                    <li>
+                        <router-link :to="{name: 'GameCanvas'}">Tiny REDUX TIC TAC TOE</router-link>
+                    </li>
                 </ul>
             </div>
         </nav>

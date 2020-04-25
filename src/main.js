@@ -5,9 +5,17 @@ import App from './App'
 import router from './router'
 import VueChatScroll from 'vue-chat-scroll'
 import firebase from 'firebase'
+import store from './reduxState'
 
 Vue.config.productionTip = false
-
+var reduxState = {
+  fields: store.getState().fields
+};
+var unsub = store.subscribe(function() {
+  var state = store.getState();
+  // bindings
+  reduxState.fields = state.fields;
+})
 let app = null;
 
 //wait for firebase auth before creating the app:
@@ -18,7 +26,8 @@ firebase.auth().onAuthStateChanged(() => {
       el: '#app',
       router,
       components: { App },
-      template: '<App/>'
+      template: '<App/>',
+      data: reduxState,
     })
   }
 })

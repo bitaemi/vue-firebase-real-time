@@ -7,6 +7,7 @@ import SignUp from '@/components/auth/SignUp'
 import Login from '@/components/auth/Login'
 import firebase from 'firebase'
 import ViewProfile from '@/components/profile/ViewProfile'
+import GameCanvas from '@/components/GameCanvas'
 
 Vue.use(Router)
 
@@ -57,7 +58,12 @@ const router = new Router({
           next({name: 'Welcome'})
         }
       }
-    }
+    },
+    {
+      path: '/tiny-redux',
+      name: 'GameCanvas',
+      component: GameCanvas
+    },
   ]
 })
 

@@ -12,7 +12,8 @@
 - [7. Event and Key Modifiers](#7-event-and-key-modifiers)
 - [8. Conditional Output with v-if](#8-conditional-output-with-v-if)
 - [9. Looping with v-for](#9-looping-with-v-for)
-- [10. The Vue CLI](#10-the-vue-cli)
+- [10. The Vue CLI 3](#10-the-vue-cli-3)
+- [10.1. VUE CLI Service, Plugins](#101-vue-cli-service-plugins)
 - [11. Components and Vue files](#11-components-and-vue-files)
 - [12. The data() function](#12-the-data-function)
 - [13. Nesting components](#13-nesting-components)
@@ -54,22 +55,27 @@
 - [50. Updating Firestore Records](#50-updating-firestore-records)
 - [51. Deploying to Firebase](#51-deploying-to-firebase)
 - [52. Chat Project Overview & Setup](#52-chat-project-overview--setup)
-- [Passing `props` via Routes](#passing-props-via-routes)
-- [Route Guard](#route-guard)
-- [Add Firestore Docs in non-existent Collection](#add-firestore-docs-in-non-existent-collection)
-- [Real time Events (Event Listeners)](#real-time-events-event-listeners)
-- [Formating time with Moment.js](#formating-time-with-momentjs)
-- [Auto scrolling for a Real Time Updating Page](#auto-scrolling-for-a-real-time-updating-page)
-- [Google Maps Api](#google-maps-api)
-- [Creating a new Map](#creating-a-new-map)
-- [Firebase Auth](#firebase-auth)
-- [Form Validations](#form-validations)
-- [Route Guarding (auth)](#route-guarding-auth)
+- [53. Passing `props` via Routes](#53-passing-props-via-routes)
+- [54. Route Guard](#54-route-guard)
+- [55. Add Firestore Docs in non-existent Collection](#55-add-firestore-docs-in-non-existent-collection)
+- [56. Real time Events (Event Listeners)](#56-real-time-events-event-listeners)
+- [57. Formating time with Moment.js](#57-formating-time-with-momentjs)
+- [58. Auto scrolling for a Real Time Updating Page](#58-auto-scrolling-for-a-real-time-updating-page)
+- [59. Google Maps Api](#59-google-maps-api)
+- [60. Creating a new Map](#60-creating-a-new-map)
+- [61. Firebase Auth](#61-firebase-auth)
+- [62. Form Validations](#62-form-validations)
+- [63. Route Guarding (auth)](#63-route-guarding-auth)
 - [Check auth status with onAuthStateChanged](#check-auth-status-with-onauthstatechanged)
-- [Google Map Marker](#google-map-marker)
-- [Real time comments update](#real-time-comments-update)
-- [Firebase Cloud Functions](#firebase-cloud-functions)
-- [Firebase Rules](#firebase-rules)
+- [64. Google Map Marker](#64-google-map-marker)
+- [65. Real time comments update](#65-real-time-comments-update)
+- [66. Firebase Cloud Functions](#66-firebase-cloud-functions)
+- [67. Firebase Rules](#67-firebase-rules)
+- [68. Deploy to Firebase](#68-deploy-to-firebase)
+- [69. Instant Prototypeing](#69-instant-prototypeing)
+- [70. Use VUE CLI 3 to build App, Libs or Web Components](#70-use-vue-cli-3-to-build-app-libs-or-web-components)
+- [71. Use VUE CLI GUI](#71-use-vue-cli-gui)
+- [72. Redux Store in Vue](#72-redux-store-in-vue)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -79,7 +85,7 @@ Vue:
 
  - very small compared to Angular or React
 
- - for this project you need to replace the indexFake and initFake with real configs
+ - for this project you need to replace the indexFake and initFake with real configs 
 
 # Visual Studio Code Installed extensions
 
@@ -638,12 +644,14 @@ Project Overview and click on: </> to copy the config object
 
 # 39. Retrieving Firestore Data
 
+- files initFake.js(src/firebase path) and indexFake.html should be replaced with index.html and init.js (currently mentioned in .gitignore)
 ```JavaScript
 import firebase from 'firebase';
 
 //initialize Firebase
+
 var config = {
-    apiKey: "AIzaSyCOUsS6YQrqcFLNWzSV-vzq-fNTVjmir5I",
+    apiKey: "YOUR_API_KEY",
     authDomain: "ninja-smooties-97572.firebaseapp.com",
     databaseURL: "https://ninja-smooties-97572.firebaseio.com",
     projectId: "ninja-smooties-97572",
@@ -872,7 +880,7 @@ Use REAL-TIME DATA update TECHIQUE
 
 `npm start`
 
-# Passing `props` via Routes
+# 53. Passing `props` via Routes
 
 ```JavaScript
 
@@ -897,7 +905,7 @@ Use REAL-TIME DATA update TECHIQUE
     // ...
 ```
 
-# Route Guard
+# 54. Route Guard
 
 Handle the case where the route does not exist - add a beforeEnter function value:
 
@@ -918,7 +926,7 @@ Handle the case where the route does not exist - add a beforeEnter function valu
     }
 ```    
 
-# Add Firestore Docs in non-existent Collection
+# 55. Add Firestore Docs in non-existent Collection
 
 if the collection doesn't exist will automatically create it:
 
@@ -932,7 +940,7 @@ if the collection doesn't exist will automatically create it:
         err => console.log(err)
     )
 ```
-# Real time Events (Event Listeners)
+# 56. Real time Events (Event Listeners)
 
 In chat's page we should see all the messages (messages = []) of the conversation
 
@@ -963,7 +971,7 @@ and get only those added using the docChanges method:
         )
     },
 ```
- # Formating time with Moment.js
+ # 57. Formating time with Moment.js
 
 `npm i moment --save`
 
@@ -971,7 +979,7 @@ and get only those added using the docChanges method:
  timestamp: moment(doc.data().timestamp).format('lll'),
 ```
 
-# Auto scrolling for a Real Time Updating Page
+# 58. Auto scrolling for a Real Time Updating Page
 
 `npm i vue-chat-scroll`
 
@@ -998,7 +1006,7 @@ and plugin this class(plugin = package) like this:
 
 `Vue.use(VueChatScroll)`
 
-# Google Maps Api
+# 59. Google Maps Api
 
 Head to : (https://console.developers.google.com/apis/dashboard?pli=1)[https://console.developers.google.com/apis/dashboard?pli=1] 
 
@@ -1017,13 +1025,13 @@ Copy the `<script>` tag from the buttom of the page:
 
 and place it in the index.
 
-# Creating a new Map
+# 60. Creating a new Map
 
 We need to insert the map into the DOM, so we cannot create it in the created() lifecle hook of the component, but rather in the mounted()
 
 hook, when the component has already mounted the DOM.
 
-# Firebase Auth
+# 61. Firebase Auth
 
  The Server( Firebase ) will interact with  the Vue App:
 
@@ -1035,7 +1043,7 @@ hook, when the component has already mounted the DOM.
   
    (for example)> Enable
 
-# Form Validations
+# 62. Form Validations
 
 For the moment we will handle the validation on Vue App side, but is better to do it using 
 
@@ -1117,7 +1125,7 @@ Use browser's geolocation  info to render the map using coordinates provided by 
         { maximumAge: 60000, timeout: 3000})
 ```
 
-# Route Guarding (auth)
+# 63. Route Guarding (auth)
 
 Protect page from non-authenticated users, by adding to component's route:
 
@@ -1167,7 +1175,7 @@ created() {
 },
 ```
 
-# Google Map Marker
+# 64. Google Map Marker
 
 Create a new google.maps.Marker object and use it to display user's current location:
 
@@ -1196,7 +1204,7 @@ Create a new google.maps.Marker object and use it to display user's current loca
     )
 ```
 
-# Real time comments update
+# 65. Real time comments update
 
 Use the onSnapshot and docChanges methods:
 
@@ -1219,7 +1227,7 @@ Use the onSnapshot and docChanges methods:
         }
     )
 ```
-# Firebase Cloud Functions
+# 66. Firebase Cloud Functions
 
  - can be used to create configurations to take care of all the server management ( data processing functions that we use inside our app).
 
@@ -1239,7 +1247,7 @@ write the functions into functions/index.js
 
 `firebase deploy --only functions` to deploy the functions to Firestore
 
-# Firebase Rules
+# 67. Firebase Rules
 
 You can restrict database access, changing the `Rules` section or the firestore.rules file
 
@@ -1255,7 +1263,7 @@ service cloud.firestore {
 ```
 deploy project to propagate rules changes to Firebase.
 
-# Deploy to Firebase
+# 68. Deploy to Firebase
 
 Remember to use VUE CLI 3 and you will build the app simple:
 
@@ -1266,7 +1274,7 @@ You can access your firebase app at https://yourprjname.firebaseapp.com after de
 
 `firebase deploy --only hosting`
 
-# Instant Prototypeing
+# 69. Instant Prototypeing
 
 `npm  i -g @vue/cli-service-global`
 
@@ -1274,7 +1282,7 @@ this adds the serve vue cli and we can run:
 
 `vue serve online.vue` inside's online.vue component to instantly preview the component
 
-# Use VUE CLI 3 to build App, Libs or Web Components
+# 70. Use VUE CLI 3 to build App, Libs or Web Components
 
 `npm  i -g @vue/cli-service-global`
 
@@ -1282,7 +1290,7 @@ we build the web componet into a web component(online-status):
 
 `vue build online.vue --target wc --name online-status`
 
-# Use VUE CLI GUI
+# 71. Use VUE CLI GUI
 
 `vue ui`
 
@@ -1291,4 +1299,6 @@ and  in the opened [http://localhost:8000/project/select]:
 import your projects
 
 or create a new one with the default presets ...
-cd into prj folser and run npm serve
+cd into prj folder and run npm serve
+
+# 72. [Redux Store in Vue](./src/redux/README.md)
