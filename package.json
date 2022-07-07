@@ -13,7 +13,7 @@
     "firebase": "^5.8.0",
     "firebase-admin": "^6.5.1",
     "firebase-functions": "^2.1.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "redux-update": "^1.0.17",
     "slugify": "^1.3.4",
     "vue": "^2.5.2",
